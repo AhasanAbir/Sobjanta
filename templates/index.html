@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <span>Sobjanta</span>
+            <span>API</span>
+        </div>
+        <div class="profile-section">
+            <img src="https://via.placeholder.com/40" alt="Profile Image" class="profile-image">
+            <button class="three-dots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <div class="dropdown-menu">
+                <button class="close-btn">&times;</button>
+                <div class="dropdown-item">Profile</div>
+                <div class="dropdown-item">Settings</div>
+                <div class="dropdown-item">Notifications</div>
+                <div class="dropdown-item">Help</div>
+                <div class="dropdown-item">Upgrade</div>
+                <div class="dropdown-item">Logout</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <h1>Search Results</h1>
+        <form method="POST" action="/">
+            <input type="text" name="query" placeholder="Enter your search" value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="results-container">
+        {% if results %}
+            {% for result in results %}
+                <div class="result-card">
+                    <h2>{{ result.title }}</h2>
+                    <p>{{ result.content | truncate(200) }}</p>
+                    <a href="{{ result.url }}" target="_blank">Read More</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination Bar -->
+    <div class="pagination">
+        <button {% if page == 1 %} disabled {% endif %}>Previous</button>
+        <button class="page-number">1</button>
+        <button class="page-number">2</button>
+        <button class="page-number">3</button>
+        <button class="page-number">4</button>
+        <button class="page-number">5</button>
+        <button class="page-number">6</button>
+        <button class="page-number">7</button>
+        <button class="page-number">...</button>
+        <button class="page-number">69</button>
+        <button {% if page == total_pages %} disabled {% endif %}>Next</button>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Powered by Sobjanta API | Designed by Ahasanul Haque Abir</p>
+    </footer>
+
+   <!-- JavaScript -->
+   <script>
+    document.querySelector('.three-dots').addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent closing when clicking inside the menu
+        document.querySelector('.dropdown-menu').classList.toggle('active');
+    });
+
+    // Close the menu when clicking outside
+    document.addEventListener('click', function (e) {
+        const menu = document.querySelector('.dropdown-menu');
+        const profileSection = document.querySelector('.profile-section');
+
+        if (!profileSection.contains(e.target) && menu.classList.contains('active')) {
+            menu.classList.remove('active');
+        }
+    });
+
+    // Close the menu when clicking the close button
+    document.querySelector('.dropdown-menu .close-btn').addEventListener('click', function () {
+        document.querySelector('.dropdown-menu').classList.remove('active');
+    });
+</script>
+
+</body>
+</html>
